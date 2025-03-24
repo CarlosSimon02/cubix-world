@@ -27,7 +27,7 @@ const Footer = () => {
     footer: {
       backgroundColor: token.colorBgContainer,
       borderTop: `${token.lineWidth}px ${token.lineType} ${token.colorSplit}`,
-      padding: `${token.sizeXXL}px 0px`,
+      padding: `${token.sizeMD}px 0px`,
     },
     nav: {
       alignItems: "center",

@@ -2,9 +2,12 @@
 
 import FrontContainer from "@/presentation/components/FrontContainer";
 import Logo from "@/presentation/components/Logo";
+import { useAuth } from "@/presentation/contexts/AuthContext";
 import { MenuOutlined } from "@ant-design/icons";
 import { Button, Grid, Menu, MenuProps, Space, theme } from "antd";
+import Link from "next/link";
 import { useState } from "react";
+import UserAvatar from "./UserAvatar";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
@@ -39,6 +42,7 @@ const menuItems = [
 ];
 
 const Navbar = () => {
+  const { user } = useAuth();
   const { token } = useToken();
   const screens = useBreakpoint();
 
@@ -100,10 +104,20 @@ const Navbar = () => {
             }
           />
         </div>
-        <Space>
-          {screens.md ? <Button type="text">Log in</Button> : ""}
-          <Button type="primary">Sign up</Button>
-        </Space>
+        {user ? (
+          <UserAvatar user={user} />
+        ) : (
+          <Space>
+            {screens.md && (
+              <Link href="/login" passHref>
+                <Button type="text">Log in</Button>
+              </Link>
+            )}
+            <Link href="/signup" passHref>
+              <Button type="primary">Sign up</Button>
+            </Link>
+          </Space>
+        )}
       </FrontContainer>
     </nav>
   );

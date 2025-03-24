@@ -1,5 +1,5 @@
+import Navbar from "@/app/(front)/_components/Navbar";
 import Footer from "@/presentation/components/Footer";
-import Navbar from "@/presentation/components/Navbar";
 import ContentContainer from "./_components/ContentContainer";
 import MainLayoutContainer from "./_components/MainLayoutContainer";
 

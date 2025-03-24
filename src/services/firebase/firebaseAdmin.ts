@@ -1,4 +1,4 @@
-import { firebaseAdminParams } from "@/config/firebase";
+import { env } from "@/config/env";
 import { debugLog } from "@/utils/debugLog";
 import { normalizeNewLines } from "@/utils/normalizeNewLines";
 import admin, { credential, ServiceAccount } from "firebase-admin";
@@ -11,6 +11,13 @@ type FirebaseAdminParams = {
   clientEmail: string;
   privateKey: string;
   storageBucket?: string;
+};
+
+const firebaseAdminParams = {
+  projectId: env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  clientEmail: env.FIREBASE_CLIENT_EMAIL,
+  privateKey: env.FIREBASE_PRIVATE_KEY,
+  storageBucket: env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
 };
 
 export function initializeFirebaseAdmin(params: FirebaseAdminParams) {
@@ -35,6 +42,13 @@ export function initializeFirebaseAdmin(params: FirebaseAdminParams) {
 }
 
 const adminApp = initializeFirebaseAdmin(firebaseAdminParams);
+
+const IS_USING_EMULATORS = env.NEXT_PUBLIC_IS_USING_EMULATORS === true;
+if (IS_USING_EMULATORS && env.NODE_ENV !== "production") {
+  process.env["FIRESTORE_EMULATOR_HOST"] = "localhost:8080";
+  process.env["FIREBASE_AUTH_EMULATOR_HOST"] = "localhost:9099";
+  process.env["FIREBASE_STORAGE_EMULATOR_HOST"] = "localhost:9199";
+}
 
 export const adminFirestore = getFirestore(adminApp);
 export const adminAuth = getAuth(adminApp);
