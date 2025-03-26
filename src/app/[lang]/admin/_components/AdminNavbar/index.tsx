@@ -22,20 +22,12 @@ const AdminNavbar = () => {
         padding: "0 24px",
       }}
     >
-      <Row
-        align="middle"
-        style={{
-          justifyContent: sm ? "space-between" : "end",
-        }}
-      >
+      <Row align="middle" justify={sm ? "space-between" : "end"}>
         <HeaderSearch />
-        <Space size={md ? 32 : 16} align="center">
+        <Space size={16} align="center">
           <LanguageSwitcher />
           <ThemeSwitcher />
-
-          <Space size={md ? 16 : 8} align="center">
-            <UserAvatar user={user} />
-          </Space>
+          <UserAvatar user={user} />
         </Space>
       </Row>
     </Header>

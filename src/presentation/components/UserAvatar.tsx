@@ -26,7 +26,7 @@ const UserAvatar = ({ user }: UserAvatarProps) => {
   ];
   return (
     <Dropdown menu={{ items }}>
-      <Avatar src={user?.photoURL}>
+      <Avatar src={user?.photoURL} size={40}>
         {user?.email?.charAt(0).toUpperCase()}
       </Avatar>
     </Dropdown>

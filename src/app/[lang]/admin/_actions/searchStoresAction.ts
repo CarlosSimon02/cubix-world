@@ -6,8 +6,11 @@ const searchStoresAction = async (
   value: string
 ): Promise<ServerActionResponse<IStore[]>> => {
   try {
+    if (!value.trim()) {
+      return { data: mockData.stores.slice(0, 10), error: null };
+    }
+
     const lowerValue = value.toLowerCase();
-    // Filter stores by name
     const filtered = mockData.stores.filter((store) =>
       store.title.toLowerCase().includes(lowerValue)
     );

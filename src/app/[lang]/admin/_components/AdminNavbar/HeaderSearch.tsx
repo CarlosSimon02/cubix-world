@@ -38,11 +38,12 @@ const HeaderSearch = () => {
   };
 
   return (
-    <Col xs={0} sm={8} md={12}>
+    <Col xs={0} sm={8} md={14}>
       <AutoComplete
         style={styles.autoComplete}
         options={options}
         filterOption={false}
+        onFocus={() => setValue("")}
         onSearch={debounce(setValue, 300)}
       >
         <Input

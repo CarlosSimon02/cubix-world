@@ -23,8 +23,18 @@ const { Text } = Typography;
 const Label = ({ title }: { title: string }) => {
   const t = useDictionary();
 
+  const styles: Styles = {
+    headerTitle: {
+      display: "flex",
+      justifyContent: "space-between",
+      fontSize: "14px",
+      fontWeight: "bold",
+      borderBottom: "1px",
+    },
+  };
+
   return (
-    <div className="header-title">
+    <div style={styles.headerTitle}>
       <Text style={{ fontSize: "16px" }}>{title}</Text>
       <Link href={`/${title.toLowerCase()}`}>{t.search.more}</Link>
     </div>
@@ -55,21 +65,18 @@ const useSearch = (value: string) => {
     queryKey: ["search", "orders", value],
     queryFn: async () =>
       handleServerActionResponse(await searchOrdersAction(value)),
-    enabled: !!value,
   });
 
   const { data: stores } = useQuery({
     queryKey: ["search", "stores", value],
     queryFn: async () =>
       handleServerActionResponse(await searchStoresAction(value)),
-    enabled: !!value,
   });
 
   const { data: couriers } = useQuery({
     queryKey: ["search", "couriers", value],
     queryFn: async () =>
       handleServerActionResponse(await searchCouriersAction(value)),
-    enabled: !!value,
   });
 
   useEffect(() => {
