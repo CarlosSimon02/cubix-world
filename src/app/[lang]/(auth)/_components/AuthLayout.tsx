@@ -1,10 +1,9 @@
 "use client";
 
-import { Card, Grid, theme, Typography } from "antd";
+import { Card, theme, Typography } from "antd";
 import { ReactNode } from "react";
 
 const { useToken } = theme;
-const { useBreakpoint } = Grid;
 
 type AuthLayoutProps = {
   children: ReactNode;
@@ -14,7 +13,6 @@ type AuthLayoutProps = {
 
 const AuthLayout = ({ children, title, description }: AuthLayoutProps) => {
   const { token } = useToken();
-  const screens = useBreakpoint();
 
   const styles = {
     container: {

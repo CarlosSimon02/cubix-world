@@ -1,6 +1,6 @@
-import Navbar from "@/app/(front)/_components/Navbar";
 import Footer from "@/presentation/components/Footer";
 import ContentContainer from "./_components/ContentContainer";
+import FrontNavbar from "./_components/FrontNavbar";
 import MainLayoutContainer from "./_components/MainLayoutContainer";
 
 type FrontLayoutProps = {
@@ -10,7 +10,7 @@ type FrontLayoutProps = {
 const FrontLayout = ({ children }: FrontLayoutProps) => {
   return (
     <MainLayoutContainer>
-      <Navbar />
+      <FrontNavbar />
       <ContentContainer>{children}</ContentContainer>
       <Footer />
     </MainLayoutContainer>

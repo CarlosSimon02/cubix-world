@@ -1,6 +1,6 @@
 import { env } from "@/config/env";
 
-export function debugLog(context: string, message: string, data?: unknown) {
+const debugLog = (context: string, message: string, data?: unknown) => {
   if (env.NODE_ENV === "development") {
     const logMessage = `[${context}]: ${message}`;
     if (data) {
@@ -9,4 +9,6 @@ export function debugLog(context: string, message: string, data?: unknown) {
       console.log(logMessage);
     }
   }
-}
+};
+
+export default debugLog;

@@ -1,7 +1,7 @@
 import { UserEntity } from "@/core/entities/UserEntity";
 import { DecodedIdToken } from "firebase-admin/auth";
 
-export function tokensToUserEntity(decodedToken: DecodedIdToken): UserEntity {
+const tokensToUserEntity = (decodedToken: DecodedIdToken): UserEntity => {
   const { uid, email, picture, name } = decodedToken;
 
   return {
@@ -10,4 +10,6 @@ export function tokensToUserEntity(decodedToken: DecodedIdToken): UserEntity {
     displayName: name,
     photoURL: picture,
   };
-}
+};
+
+export default tokensToUserEntity;

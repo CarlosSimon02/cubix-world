@@ -3,7 +3,7 @@ import { getTokens } from "next-firebase-auth-edge";
 import { cookies, headers } from "next/headers";
 import { cache } from "react";
 
-export const getAuthTokens = cache(async () => {
+const getAuthTokens = cache(async () => {
   const cookieStore = await cookies();
   const headerStore = await headers();
 
@@ -19,3 +19,5 @@ export const getAuthTokens = cache(async () => {
     throw new Error("Failed to fetch authentication tokens.");
   }
 });
+
+export default getAuthTokens;

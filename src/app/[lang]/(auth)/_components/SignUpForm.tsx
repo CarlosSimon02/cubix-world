@@ -1,19 +1,17 @@
 "use client";
 
 import { GoogleOutlined } from "@ant-design/icons";
-import { Button, Divider, Form, Grid, Input, Typography, theme } from "antd";
+import { Button, Divider, Form, Input, Typography, theme } from "antd";
 import Link from "next/link";
 import { useGoogleSignIn } from "../_hooks/useGoogleSignIn";
 import { useSignUp } from "../_hooks/useSignUp";
 import AuthLayout from "./AuthLayout";
 
 const { useToken } = theme;
-const { useBreakpoint } = Grid;
 const { Text } = Typography;
 
 const SignUpForm = () => {
   const { token } = useToken();
-  const screens = useBreakpoint();
   const [form] = Form.useForm();
 
   const signUpMutation = useSignUp();

@@ -4,7 +4,7 @@ import { authConfig } from "@/config/nextFirebaseAuthEdge";
 import { UserEntity } from "@/core/entities/UserEntity";
 import { onboardUserFactory } from "@/factories/auth/onbaordUserFactory";
 import { verifyIdTokenFactory } from "@/factories/auth/verifyIdTokenFactory";
-import { tokensToUserEntity } from "@/utils/tokensToUserEntity";
+import tokensToUserEntity from "@/utils/tokensToUserEntity";
 import { refreshCookiesWithIdToken } from "next-firebase-auth-edge/lib/next/cookies";
 import { cookies, headers } from "next/headers";
 

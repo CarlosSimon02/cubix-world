@@ -1,6 +1,6 @@
 import { env } from "@/config/env";
 import { firebaseConfig } from "@/config/firebase";
-import { debugLog } from "@/utils/debugLog";
+import debugLog from "@/utils/debugLog";
 import { initializeApp } from "firebase/app";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";

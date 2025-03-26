@@ -1,18 +1,16 @@
 "use client";
 
-import { Button, Form, Grid, Input, Typography, theme } from "antd";
+import { Button, Form, Input, Typography, theme } from "antd";
 import Link from "next/link";
 import { useState } from "react";
 import { useResetPassword } from "../_hooks/useResetPassword";
 import AuthLayout from "./AuthLayout";
 
 const { useToken } = theme;
-const { useBreakpoint } = Grid;
 const { Paragraph, Title } = Typography;
 
 const ForgotPasswordForm = () => {
   const { token } = useToken();
-  const screens = useBreakpoint();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
   const [form] = Form.useForm();
@@ -97,7 +95,7 @@ const ForgotPasswordForm = () => {
             Check your email
           </Title>
           <Paragraph style={{ color: token.colorTextSecondary }}>
-            We've sent a password reset link to {submittedEmail}
+            We&apos;ve sent a password reset link to {submittedEmail}
           </Paragraph>
           <div style={{ marginTop: token.marginLG }}>
             <Link href="/login" style={styles.link}>

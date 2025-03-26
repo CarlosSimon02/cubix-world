@@ -1,3 +1,5 @@
-export function normalizeNewLines(key: string): string {
+const normalizeNewLines = (key: string): string => {
   return key.replace(/\\n/g, "\n");
-}
+};
+
+export default normalizeNewLines;

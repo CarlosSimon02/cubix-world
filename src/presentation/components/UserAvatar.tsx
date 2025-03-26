@@ -3,7 +3,7 @@
 import { UserEntity } from "@/core/entities/UserEntity";
 import { LogoutOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, MenuProps, Space, Typography } from "antd";
-import { logoutAction } from "../_actions/logoutAction";
+import { logoutAction } from "../../app/[lang]/(front)/_actions/logoutAction";
 
 type UserAvatarProps = {
   user: UserEntity | null;

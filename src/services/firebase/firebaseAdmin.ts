@@ -1,6 +1,6 @@
 import { env } from "@/config/env";
-import { debugLog } from "@/utils/debugLog";
-import { normalizeNewLines } from "@/utils/normalizeNewLines";
+import debugLog from "@/utils/debugLog";
+import normalizeNewLines from "@/utils/normalizeNewLines";
 import admin, { credential, ServiceAccount } from "firebase-admin";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";

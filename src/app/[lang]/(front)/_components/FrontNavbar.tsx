@@ -2,12 +2,12 @@
 
 import FrontContainer from "@/presentation/components/FrontContainer";
 import Logo from "@/presentation/components/Logo";
+import UserAvatar from "@/presentation/components/UserAvatar";
 import { useAuth } from "@/presentation/contexts/AuthContext";
 import { MenuOutlined } from "@ant-design/icons";
 import { Button, Grid, Menu, MenuProps, Space, theme } from "antd";
 import Link from "next/link";
 import { useState } from "react";
-import UserAvatar from "./UserAvatar";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
@@ -41,7 +41,7 @@ const menuItems = [
   },
 ];
 
-const Navbar = () => {
+const FrontNavbar = () => {
   const { user } = useAuth();
   const { token } = useToken();
   const screens = useBreakpoint();
@@ -61,7 +61,9 @@ const Navbar = () => {
     header: {
       backgroundColor: token.colorBgContainer,
       borderBottom: `${token.lineWidth}px ${token.lineType} ${token.colorSplit}`,
-      position: "relative",
+      position: "sticky",
+      top: 0,
+      zIndex: 1000,
     },
     logo: {
       display: "block",
@@ -123,4 +125,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default FrontNavbar;
