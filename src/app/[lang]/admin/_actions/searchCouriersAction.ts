@@ -6,8 +6,11 @@ const searchCouriersAction = async (
   value: string
 ): Promise<ServerActionResponse<ICourier[]>> => {
   try {
+    if (!value.trim()) {
+      return { data: mockData.couriers.slice(0, 10), error: null };
+    }
+
     const lowerValue = value.toLowerCase();
-    // Filter couriers by name, surname, or email
     const filtered = mockData.couriers.filter(
       (courier) =>
         courier.name.toLowerCase().includes(lowerValue) ||

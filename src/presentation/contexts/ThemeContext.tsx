@@ -1,5 +1,6 @@
 "use client";
 
+import { ConfigProvider, theme } from "antd";
 import React, {
   createContext,
   useCallback,
@@ -82,7 +83,14 @@ export default function ThemeProvider({
         setSystemTheme,
       }}
     >
-      {children}
+      <ConfigProvider
+        theme={{
+          algorithm:
+            themeMode === "dark" ? theme.darkAlgorithm : theme.compactAlgorithm,
+        }}
+      >
+        {children}
+      </ConfigProvider>
     </ThemeContext.Provider>
   );
 }

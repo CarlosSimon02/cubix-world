@@ -13,7 +13,7 @@ const { useToken } = theme;
 
 const AdminNavbar = () => {
   const { user } = useAuth();
-  const { md, sm } = useBreakpoint();
+  const { sm } = useBreakpoint();
   const { token } = useToken();
   return (
     <Header

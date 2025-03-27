@@ -43,7 +43,6 @@ const HeaderSearch = () => {
         style={styles.autoComplete}
         options={options}
         filterOption={false}
-        onFocus={() => setValue("")}
         onSearch={debounce(setValue, 300)}
       >
         <Input
