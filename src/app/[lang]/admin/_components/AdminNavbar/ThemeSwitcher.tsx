@@ -1,36 +1,22 @@
+"use client";
+
 import { useTheme } from "@/presentation/contexts/ThemeContext";
-import { MoonOutlined, SunOutlined } from "@ant-design/icons";
-import { Button, theme } from "antd";
+import { Button } from "primereact/button";
 
-const { useToken } = theme;
+export default function ThemeSwitcher() {
+  const { setTheme, resolvedTheme } = useTheme();
 
-const ThemeSwitcher = () => {
-  const { themeMode, toggleTheme } = useTheme();
-  const { token } = useToken();
-
-  const styles: Styles = {
-    themeSwitcher: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      height: "32px",
-      width: "32px",
-      borderRadius: "50%",
-      cursor: "pointer",
-      backgroundColor: token.colorBgTextHover,
-    },
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
   return (
     <Button
-      style={styles.themeSwitcher}
-      type="text"
-      icon={themeMode === "light" ? <MoonOutlined /> : <SunOutlined />}
-      onClick={() => {
-        toggleTheme();
-      }}
+      icon={`pi pi-${resolvedTheme === "dark" ? "sun" : "moon"}`}
+      onClick={toggleTheme}
+      className="p-button-rounded p-button-text"
+      aria-label="Toggle theme"
+      tooltip={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
     />
   );
-};
-
-export default ThemeSwitcher;
+}

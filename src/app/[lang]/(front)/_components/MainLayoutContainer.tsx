@@ -3,15 +3,7 @@ type MainLayoutContainerProps = {
 };
 
 const MainLayoutContainer = ({ children }: MainLayoutContainerProps) => {
-  const styles: Styles = {
-    container: {
-      minHeight: "100dvh",
-      display: "flex",
-      flexDirection: "column",
-    },
-  };
-
-  return <div style={styles.container}>{children}</div>;
+  return <div className="flex-column flex min-h-screen">{children}</div>;
 };
 
 export default MainLayoutContainer;

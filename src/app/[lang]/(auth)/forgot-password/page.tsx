@@ -1,9 +1,16 @@
 import { Metadata } from "next";
 import ForgotPasswordForm from "../_components/ForgotPasswordForm";
 
+const translations = {
+  metadata: {
+    title: "Forgot Password",
+    description: "Reset your Cubix World password",
+  },
+};
+
 export const metadata: Metadata = {
-  title: "Forgot Password",
-  description: "Reset your Personal Finance App password",
+  title: translations.metadata.title,
+  description: translations.metadata.description,
 };
 
 const ForgotPasswordPage = () => {

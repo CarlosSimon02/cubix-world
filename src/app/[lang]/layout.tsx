@@ -3,10 +3,9 @@ import { Locale } from "@/types/locale.type";
 import getAuthTokens from "@/utils/getAuthTokens";
 import getDictionary from "@/utils/getDictionary";
 import tokensToUserEntity from "@/utils/tokensToUserEntity";
-import "@ant-design/v5-patch-for-react-19";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Providers } from "../providers";
+import Providers from "../providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,13 +17,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const translations = {
+  root: {
+    title: "Cubix World",
+    description:
+      "Discover a world of exciting puzzles and brain-teasing toys that spark creativity, boost problem-solving skills, and provide endless fun for all ages!",
+  },
+};
+
 export const metadata: Metadata = {
   title: {
-    template: "%s - Cubix World",
-    default: "Cubix World",
+    template: `%s - ${translations.root.title}`,
+    default: translations.root.title,
   },
-  description:
-    "Discover a world of exciting puzzles and brain-teasing toys that spark creativity, boost problem-solving skills, and provide endless fun for all ages!",
+  description: translations.root.description,
 };
 
 type RootLayoutProps = {

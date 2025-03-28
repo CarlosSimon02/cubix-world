@@ -1,104 +1,80 @@
 "use client";
 
-import { ConfigProvider, theme } from "antd";
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
+type Theme = "light" | "dark" | "system";
 type ThemeContextType = {
-  themeMode: "light" | "dark";
+  theme: Theme;
+  resolvedTheme: "light" | "dark";
+  setTheme: (theme: Theme) => void;
   isSystemTheme: boolean;
-  toggleTheme: () => void;
-  setSystemTheme: (useSystem: boolean) => void;
 };
 
-const ThemeContext = createContext<ThemeContextType>(null!);
+const ThemeContext = createContext<ThemeContextType | null>(null);
 
-export default function ThemeProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
-  const [isSystemTheme, setIsSystemTheme] = useState(true);
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setThemeState] = useState<Theme>("system");
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
+  const [mounted, setMounted] = useState(false);
 
-  const getSystemPreference = useCallback(() => {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  useEffect(() => {
+    setMounted(true);
+    const storedTheme = localStorage.getItem("theme") as Theme | null;
+    const systemDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    const initialTheme = storedTheme || "system";
+    setThemeState(initialTheme);
+    setResolvedTheme(
+      initialTheme === "system" ? (systemDark ? "dark" : "light") : initialTheme
+    );
   }, []);
 
   useEffect(() => {
-    const savedDarkMode = localStorage.getItem("darkMode");
-    const savedIsSystemTheme = localStorage.getItem("isSystemTheme");
+    if (!mounted) return;
 
-    if (savedDarkMode !== null && savedIsSystemTheme === "false") {
-      setIsSystemTheme(false);
-      setThemeMode(savedDarkMode === "true" ? "dark" : "light");
-    } else {
-      setIsSystemTheme(true);
-      setThemeMode(getSystemPreference() ? "dark" : "light");
+    const root = document.documentElement;
+    const systemDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    const newResolvedTheme =
+      theme === "system" ? (systemDark ? "dark" : "light") : theme;
+
+    setResolvedTheme(newResolvedTheme);
+    root.classList.remove("light", "dark");
+    root.classList.add(newResolvedTheme);
+    root.style.setProperty("color-scheme", newResolvedTheme);
+
+    // Load PrimeReact theme
+    const themeLink = document.getElementById("prime-theme") as HTMLLinkElement;
+    if (themeLink) {
+      themeLink.href = `/themes/lara-${newResolvedTheme}-blue/theme.css`;
     }
-  }, [getSystemPreference]);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => {
-      if (isSystemTheme) {
-        setThemeMode(mediaQuery.matches ? "dark" : "light");
-      }
-    };
+    if (theme === "system") {
+      localStorage.removeItem("theme");
+    } else {
+      localStorage.setItem("theme", theme);
+    }
+  }, [theme, mounted]);
 
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [isSystemTheme]);
-
-  const toggleTheme = useCallback(() => {
-    const newMode = themeMode === "light" ? "dark" : "light";
-    setThemeMode(newMode);
-    setIsSystemTheme(false);
-    localStorage.setItem("darkMode", String(newMode === "dark"));
-    localStorage.setItem("isSystemTheme", "false");
-  }, [themeMode]);
-
-  const setSystemTheme = useCallback(
-    (useSystem: boolean) => {
-      setIsSystemTheme(useSystem);
-      localStorage.setItem("isSystemTheme", String(useSystem));
-      if (useSystem) {
-        setThemeMode(getSystemPreference() ? "dark" : "light");
-      }
-    },
-    [getSystemPreference]
-  );
+  const value = {
+    theme,
+    resolvedTheme,
+    setTheme: (theme: Theme) => setThemeState(theme),
+    isSystemTheme: theme === "system",
+  };
 
   return (
-    <ThemeContext.Provider
-      value={{
-        themeMode,
-        isSystemTheme,
-        toggleTheme,
-        setSystemTheme,
-      }}
-    >
-      <ConfigProvider
-        theme={{
-          algorithm:
-            themeMode === "dark" ? theme.darkAlgorithm : theme.compactAlgorithm,
-        }}
-      >
-        {children}
-      </ConfigProvider>
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
 
-export const useTheme = () => {
+export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
-};
+}

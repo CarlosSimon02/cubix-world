@@ -1,58 +1,30 @@
 "use client";
 
 import { useDictionary } from "@/presentation/contexts/DictionaryContext";
-import { SearchOutlined } from "@ant-design/icons";
-import { AutoComplete, Col, Input, theme } from "antd";
 import { debounce } from "lodash";
+import { AutoComplete } from "primereact/autocomplete";
+import { InputText } from "primereact/inputtext";
 import { useState } from "react";
 import useSearch from "../../_hooks/useSearch";
 
-const { useToken } = theme;
-
 const HeaderSearch = () => {
-  const { token } = useToken();
   const t = useDictionary();
   const [value, setValue] = useState("");
   const { options } = useSearch(value);
 
-  const styles: Styles = {
-    autoComplete: {
-      width: "100%",
-      maxWidth: "550px",
-    },
-    inputPrefix: {
-      color: token.colorTextPlaceholder,
-      marginRight: "4px",
-    },
-    inputSuffix: {
-      width: "20px",
-      height: "20px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: token.colorBgTextHover,
-      color: token.colorTextDisabled,
-      borderRadius: "4px",
-      fontSize: "12px",
-    },
-  };
-
   return (
-    <Col xs={0} sm={8} md={14}>
+    <div className="relative mr-4 hidden flex-1 md:block">
       <AutoComplete
-        style={styles.autoComplete}
-        options={options}
-        filterOption={false}
-        onSearch={debounce(setValue, 300)}
+        value={value}
+        suggestions={options}
+        completeMethod={debounce((e) => setValue(e.query), 300)}
+        dropdown
+        className="w-full"
       >
-        <Input
-          size="large"
-          placeholder={t.search.placeholder}
-          suffix={<div style={styles.inputSuffix}>/</div>}
-          prefix={<SearchOutlined style={styles.inputPrefix} />}
-        />
+        <InputText placeholder={t.search.placeholder} className="w-full pl-8" />
       </AutoComplete>
-    </Col>
+      <i className="pi pi-search text-color-secondary absolute top-1/2 left-3 -translate-y-1/2 transform" />
+    </div>
   );
 };
 

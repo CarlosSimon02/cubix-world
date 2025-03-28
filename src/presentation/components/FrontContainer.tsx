@@ -1,29 +1,17 @@
-import { Grid, theme } from "antd";
-import { CSSProperties, ReactNode } from "react";
-
-const { useToken } = theme;
-const { useBreakpoint } = Grid;
+import { classNames } from "primereact/utils";
+import { ReactNode } from "react";
 
 type FrontContainerProps = {
   children: ReactNode;
-  style?: CSSProperties;
+  className?: string;
 };
 
-const FrontContainer = ({ children, style }: FrontContainerProps) => {
-  const { token } = useToken();
-  const screens = useBreakpoint();
-
-  const styles: Styles = {
-    container: {
-      margin: "0 auto",
-      maxWidth: token.screenXL,
-      padding: screens.md
-        ? `0px ${token.paddingLG}px`
-        : `0px ${token.padding}px`,
-      ...style,
-    },
-  };
-  return <div style={styles.container}>{children}</div>;
+const FrontContainer = ({ children, className }: FrontContainerProps) => {
+  return (
+    <div className={classNames(className, "mx-auto max-w-5xl p-4")}>
+      {children}
+    </div>
+  );
 };
 
 export default FrontContainer;

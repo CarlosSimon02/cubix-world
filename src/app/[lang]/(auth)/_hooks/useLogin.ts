@@ -2,9 +2,9 @@
 
 import { AuthCredentials } from "@/data/models/authModel";
 import { loginWithEmailFactory } from "@/factories/auth/loginWithEmailFactory";
+import { useToast } from "@/presentation/contexts/ToastContext";
 import { useRedirectParam } from "@/presentation/hooks/useRedirectParam";
 import { useMutation } from "@tanstack/react-query";
-import { notification } from "antd";
 import { useRouter } from "next/navigation";
 import postSignInAction from "../_actions/postSignInAction";
 
@@ -12,6 +12,7 @@ export const useLogin = () => {
   const logInWithEmail = loginWithEmailFactory();
   const redirect = useRedirectParam();
   const router = useRouter();
+  const { showError } = useToast();
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: AuthCredentials) => {
@@ -29,9 +30,7 @@ export const useLogin = () => {
       router.push(redirect ?? "/");
     },
     onError: (error: Error) => {
-      notification.error({
-        message: "Login failed",
-      });
+      showError("Login failed");
       console.error("Login error:", error);
     },
   });

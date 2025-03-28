@@ -1,74 +1,91 @@
 "use client";
 
 import FrontContainer from "@/presentation/components/FrontContainer";
-import {
-  Button,
-  Carousel,
-  Col,
-  Flex,
-  Grid,
-  Row,
-  theme,
-  Typography,
-} from "antd";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "primereact/button";
+import { Carousel } from "primereact/carousel";
 
-const { useToken } = theme;
-const { useBreakpoint } = Grid;
-
-const contentStyle: React.CSSProperties = {
-  // margin: 0,
-  // color: "#fff",
-  // textAlign: "center",
-  // background: "#364d79",
+const translations = {
+  hero: {
+    title: "Discover the world of Cubix",
+    description: "Explore our collection of unique and innovative products",
+    shopButton: "Shop Now",
+  },
 };
 
-const HeroSection = () => {
-  const { token } = useToken();
-  const screens = useBreakpoint();
+const carouselItems = [
+  {
+    id: 1,
+    alt: "Puzzle challenge",
+    url: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format",
+  },
+  {
+    id: 2,
+    alt: "Brain teaser",
+    url: "https://images.unsplash.com/photo-1605106702734-205df224ecce?w=800&auto=format",
+  },
+  {
+    id: 3,
+    alt: "Educational toy",
+    url: "https://images.unsplash.com/photo-1594787319144-04b35b4939c3?w=800&auto=format",
+  },
+  {
+    id: 4,
+    alt: "Family fun game",
+    url: "https://images.unsplash.com/photo-1578269174936-2709b6aeb913?w=800&auto=format",
+  },
+];
 
+const HeroSection = () => {
   return (
-    <section
-      style={{
-        backgroundColor: token.colorBgLayout,
-      }}
-    >
+    <section className="bg-surface-ground">
       <FrontContainer>
-        <Row style={{ width: "100%" }}>
-          <Col span={12}>
-            <Flex vertical align="start" style={{ padding: "48px 0" }}>
-              <Typography.Title level={screens.md ? 1 : 2}>
-                Unlock the Fun. Solve the Challenge!
-              </Typography.Title>
-              <Typography.Paragraph style={{ maxWidth: "80ch" }}>
-                Discover a world of exciting puzzles and brain-teasing toys that
-                spark creativity, boost problem-solving skills, and provide
-                endless fun for all ages!
-              </Typography.Paragraph>
-              <Button type="primary" href="https://ant.design" target="_blank">
-                Shop Now
-              </Button>
-            </Flex>
-          </Col>
-          <Col span={12}>
-            <Carousel arrows infinite={false}>
-              <div>
-                <h3 style={contentStyle}>1</h3>
-              </div>
-              <div>
-                <h3 style={contentStyle}>2</h3>
-              </div>
-              <div>
-                <h3 style={contentStyle}>3</h3>
-              </div>
-              <div>
-                <h3 style={contentStyle}>4</h3>
-              </div>
-            </Carousel>
-          </Col>
-        </Row>
+        <div className="flex-column align-items-center flex w-full md:flex-row">
+          <HeroContent />
+          <HeroCarousel items={carouselItems} />
+        </div>
       </FrontContainer>
     </section>
   );
 };
+
+const HeroContent = () => (
+  <div className="flex-column align-items-start flex w-full p-5 md:w-6">
+    <h1 className="mb-3 text-4xl md:text-6xl">{translations.hero.title}</h1>
+    <p className="line-height-3 max-w-30rem mb-5 text-lg">
+      {translations.hero.description}
+    </p>
+    <Link href="/shop" passHref>
+      <Button label={translations.hero.shopButton} className="p-button-lg" />
+    </Link>
+  </div>
+);
+
+const HeroCarousel = ({ items }: { items: typeof carouselItems }) => (
+  <div className="w-full md:w-6">
+    <Carousel
+      value={items}
+      numVisible={1}
+      numScroll={1}
+      itemTemplate={CarouselItem}
+      circular
+      autoplayInterval={5000}
+    />
+  </div>
+);
+
+const CarouselItem = (item: (typeof carouselItems)[0]) => (
+  <div className="border-round-xl overflow-hidden">
+    <Image
+      src={item.url}
+      alt={item.alt}
+      className="border-round-xl w-full"
+      width={400}
+      height={400}
+      objectFit="cover"
+    />
+  </div>
+);
 
 export default HeroSection;

@@ -1,71 +1,56 @@
 "use client";
 
-import { Button, Grid, Space, theme, Typography } from "antd";
+import Link from "next/link";
+import { Button } from "primereact/button";
 import FrontContainer from "./FrontContainer";
 import Logo from "./Logo";
 
-const { useToken } = theme;
-const { useBreakpoint } = Grid;
-const { Text } = Typography;
+const translations = {
+  about: "About",
+  pricing: "Pricing",
+  help: "Help",
+  terms: "Terms & Conditions",
+};
+
+const navItems = [
+  { label: translations.about, href: "#about" },
+  { label: translations.pricing, href: "#pricing" },
+  { label: translations.help, href: "#help" },
+  { label: translations.terms, href: "#terms" },
+];
+
+const footerText = {
+  copyright: (year: number) => `© ${year} Cubix World.`,
+};
 
 const Footer = () => {
-  const { token } = useToken();
-  const screens = useBreakpoint();
-
-  const styles: Styles = {
-    container: {
-      alignItems: "center",
-      display: "flex",
-      flexDirection: screens.md ? "row" : "column",
-      gap: token.marginLG,
-      justifyContent: "space-between",
-    },
-    logo: {
-      display: "block",
-      height: token.sizeLG,
-    },
-    footer: {
-      backgroundColor: token.colorBgContainer,
-      borderTop: `${token.lineWidth}px ${token.lineType} ${token.colorSplit}`,
-      padding: `${token.sizeMD}px 0px`,
-    },
-    nav: {
-      alignItems: "center",
-      marginLeft: screens.md ? `-${token.margin}px` : 0,
-    },
-    text: {
-      color: token.colorTextSecondary,
-      textAlign: screens.md ? "right" : "center",
-    },
-  };
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer style={styles.footer}>
-      <FrontContainer style={styles.container}>
-        <a style={styles.logo} href="#">
+    <footer className="bg-surface-ground border-surface-border border-t-1 py-6">
+      <FrontContainer className="flex flex-col items-center justify-between gap-6 md:flex-row">
+        {/* Logo */}
+        <Link href="#" className="block h-8">
           <Logo showText={true} />
-        </a>
-        <Space
-          style={styles.nav}
-          direction={screens.md ? "horizontal" : "vertical"}
-          size={screens.md ? 0 : "small"}
-        >
-          <Button type="text" href="#">
-            About
-          </Button>
-          <Button type="text" href="#">
-            Pricing
-          </Button>
-          <Button type="text" href="#">
-            Help
-          </Button>
-          <Button type="text" href="#">
-            Terms & Conditions
-          </Button>
-        </Space>
-        <Text style={styles.text}>
-          © {new Date().getFullYear()} Cubix World.
-        </Text>
+        </Link>
+
+        {/* Navigation Links */}
+        <nav className="flex flex-col items-center gap-2 md:flex-row md:gap-0">
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href} passHref legacyBehavior>
+              <Button
+                link
+                label={item.label}
+                className="text-color-secondary hover:text-primary p-2 md:mx-2"
+              />
+            </Link>
+          ))}
+        </nav>
+
+        {/* Copyright */}
+        <p className="text-color-secondary text-center md:text-right">
+          {footerText.copyright(currentYear)}
+        </p>
       </FrontContainer>
     </footer>
   );

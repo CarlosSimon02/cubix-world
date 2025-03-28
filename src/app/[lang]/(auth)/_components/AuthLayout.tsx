@@ -1,9 +1,7 @@
 "use client";
 
-import { Card, theme, Typography } from "antd";
+import { Card } from "primereact/card";
 import { ReactNode } from "react";
-
-const { useToken } = theme;
 
 type AuthLayoutProps = {
   children: ReactNode;
@@ -12,44 +10,13 @@ type AuthLayoutProps = {
 };
 
 const AuthLayout = ({ children, title, description }: AuthLayoutProps) => {
-  const { token } = useToken();
-
-  const styles = {
-    container: {
-      display: "flex",
-      minHeight: "100vh",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: `${token.sizeXL}px ${token.sizeMD}px`,
-    },
-    innerContainer: {
-      width: "100%",
-      maxWidth: token.screenXS,
-      margin: "0 auto",
-      gap: token.marginXL,
-    },
-    header: {
-      textAlign: "center" as const,
-    },
-    description: {
-      textAlign: "center" as const,
-      color: token.colorTextSecondary,
-    },
-  };
-
   return (
-    <div style={styles.container}>
-      <Card style={styles.innerContainer}>
-        <div>
-          <Typography.Title level={3} style={styles.header}>
-            {title}
-          </Typography.Title>
-          {description && (
-            <Typography.Paragraph style={styles.description}>
-              {description}
-            </Typography.Paragraph>
-          )}
-        </div>
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <Card
+        title={title}
+        subTitle={description}
+        className="mx-auto w-full max-w-xs gap-4"
+      >
         {children}
       </Card>
     </div>

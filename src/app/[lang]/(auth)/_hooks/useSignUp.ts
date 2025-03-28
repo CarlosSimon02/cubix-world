@@ -2,9 +2,9 @@
 
 import { AuthCredentials } from "@/data/models/authModel";
 import { signUpWithEmailFactory } from "@/factories/auth/signUpWithEmailFactory";
+import { useToast } from "@/presentation/contexts/ToastContext";
 import { useRedirectParam } from "@/presentation/hooks/useRedirectParam";
 import { useMutation } from "@tanstack/react-query";
-import { notification } from "antd";
 import { useRouter } from "next/navigation";
 import postSignInAction from "../_actions/postSignInAction";
 
@@ -16,6 +16,7 @@ export const useSignUp = () => {
   const signUpWithEmail = signUpWithEmailFactory();
   const redirect = useRedirectParam();
   const router = useRouter();
+  const { showError } = useToast();
 
   const signUpMutation = useMutation({
     mutationFn: async (data: SignUpData) => {
@@ -37,9 +38,8 @@ export const useSignUp = () => {
       router.push(redirect ?? "/");
     },
     onError: (error: Error) => {
-      notification.error({
-        message: `Failed to create account: ${error.message}`,
-      });
+      showError("Failed to create account");
+      console.error("Sign up error:", error);
     },
   });
 

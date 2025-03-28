@@ -1,8 +1,10 @@
+"use client";
+
 import { useDictionary } from "@/presentation/contexts/DictionaryContext";
 import handleServerActionResponse from "@/utils/handleServerActionResponse";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar, Typography } from "antd";
 import Link from "next/link";
+import { Avatar } from "primereact/avatar";
 import { useEffect, useState } from "react";
 import searchCouriersAction from "../_actions/searchCouriersAction";
 import searchOrdersAction from "../_actions/searchOrdersAction";
@@ -18,25 +20,18 @@ type Options = {
   options: OptionGroup[];
 };
 
-const { Text } = Typography;
-
 const Label = ({ title }: { title: string }) => {
   const t = useDictionary();
 
-  const styles: Styles = {
-    headerTitle: {
-      display: "flex",
-      justifyContent: "space-between",
-      fontSize: "14px",
-      fontWeight: "bold",
-      borderBottom: "1px",
-    },
-  };
-
   return (
-    <div style={styles.headerTitle}>
-      <Text style={{ fontSize: "16px" }}>{title}</Text>
-      <Link href={`/${title.toLowerCase()}`}>{t.search.more}</Link>
+    <div className="border-surface-border mb-2 flex items-center justify-between border-b-1 pb-2">
+      <span className="text-base font-semibold">{title}</span>
+      <Link
+        href={`/${title.toLowerCase()}`}
+        className="text-primary hover:text-primary-hover text-sm"
+      >
+        {t.search.more}
+      </Link>
     </div>
   );
 };
@@ -44,15 +39,19 @@ const Label = ({ title }: { title: string }) => {
 const renderItem = (title: string, imageUrl: string, link: string) => ({
   value: title,
   label: (
-    <Link href={link} style={{ display: "flex", alignItems: "center" }}>
+    <Link
+      href={link}
+      className="align-items-center hover:bg-surface-hover flex p-2"
+    >
       {imageUrl && (
         <Avatar
-          size={32}
-          src={imageUrl}
-          style={{ minWidth: "32px", marginRight: "16px" }}
+          image={imageUrl}
+          size="large"
+          shape="circle"
+          className="mr-3 min-w-[2rem]"
         />
       )}
-      <Text>{title}</Text>
+      <span className="text-color">{title}</span>
     </Link>
   ),
 });
@@ -88,7 +87,7 @@ const useSearch = (value: string) => {
         options: orders.map((item) =>
           renderItem(
             `${item.store.title} / #${item.orderNumber}`,
-            item?.products?.[0].images?.[0]?.url ||
+            item?.products?.[0]?.images?.[0]?.url ||
               "/images/default-order-img.png",
             `/orders/show/${item.id}`
           )
@@ -111,7 +110,7 @@ const useSearch = (value: string) => {
         options: couriers.map((item) =>
           renderItem(
             `${item.name} ${item.surname}`,
-            item.avatar[0].url,
+            item.avatar[0]?.url,
             `/couriers/show/${item.id}`
           )
         ),

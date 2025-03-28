@@ -1,67 +1,47 @@
 "use client";
 
 import { DEFAULT_LOCALE, LOCALES } from "@/config/i18n";
-import { DownOutlined } from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import { Avatar, Button, Dropdown, Space, theme, Typography } from "antd";
-import { useParams, usePathname, useRouter } from "next/navigation";
-
-const { Text } = Typography;
-const { useToken } = theme;
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { Dropdown } from "primereact/dropdown";
 
 const LanguageSwitcher = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const params = useParams();
-  const { token } = useToken();
 
-  const currentLocale = (params?.lang as string) || DEFAULT_LOCALE;
-
-  // Create regex pattern from LOCALES array
-  const localePattern = LOCALES.join("|");
-  const localeRegex = new RegExp(`^/(${localePattern})`);
-
-  const menuItems: MenuProps["items"] = LOCALES.sort().map((lang: string) => ({
-    key: lang,
-    onClick: () => {
-      // Remove current locale from pathname if present
-      const pathWithoutLocale = pathname.replace(localeRegex, "");
-      const newPath = `/${lang}${pathWithoutLocale}`;
-      router.push(newPath);
-    },
-    icon: (
-      <span style={{ marginRight: 8 }}>
-        <Avatar size={16} src={`/images/flags/${lang}.svg`} />
-      </span>
+  const localeOptions = LOCALES.map((lang) => ({
+    label: (
+      <div className="align-items-center flex gap-2">
+        <Image
+          src={`/images/flags/${lang}.svg`}
+          alt={lang}
+          className="w-[1rem]"
+          width={16}
+          height={16}
+        />
+        <span>{lang === "en" ? "English" : "German"}</span>
+      </div>
     ),
-    label: lang === "en" ? "English" : "German", // Consider making this dynamic too
+    value: lang,
   }));
+
+  const handleLocaleChange = (lang: string) => {
+    const localeRegex = new RegExp(`^/(${LOCALES.join("|")})`);
+    const pathWithoutLocale = pathname.replace(localeRegex, "");
+    router.push(`/${lang}${pathWithoutLocale}`);
+  };
 
   return (
     <Dropdown
-      menu={{
-        items: menuItems,
-        selectedKeys: [currentLocale],
+      value={DEFAULT_LOCALE}
+      options={localeOptions}
+      onChange={(e) => handleLocaleChange(e.value)}
+      optionLabel="label"
+      pt={{
+        root: { className: "w-8rem" },
+        option: { className: "text-color-secondary" },
       }}
-    >
-      <Button onClick={(e) => e.preventDefault()}>
-        <Space>
-          <Text
-            style={{
-              color: token.colorTextSecondary,
-            }}
-          >
-            {currentLocale === "en" ? "English" : "German"}
-          </Text>
-          <DownOutlined
-            style={{
-              color: token.colorTextTertiary,
-              width: "10px",
-            }}
-          />
-        </Space>
-      </Button>
-    </Dropdown>
+    />
   );
 };
 

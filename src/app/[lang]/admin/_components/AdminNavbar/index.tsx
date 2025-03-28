@@ -1,37 +1,22 @@
-"use client";
-
 import UserAvatar from "@/presentation/components/UserAvatar";
-import { useAuth } from "@/presentation/contexts/AuthContext";
-import { Grid, Layout, Row, Space, theme } from "antd";
+import withAuth from "@/utils/withAuth";
 import HeaderSearch from "./HeaderSearch";
 import LanguageSwitcher from "./LanguageSwitcher";
 import ThemeSwitcher from "./ThemeSwitcher";
 
-const { Header } = Layout;
-const { useBreakpoint } = Grid;
-const { useToken } = theme;
-
-const AdminNavbar = () => {
-  const { user } = useAuth();
-  const { sm } = useBreakpoint();
-  const { token } = useToken();
+const AdminNavbar = withAuth(({ user }) => {
   return (
-    <Header
-      style={{
-        backgroundColor: token.colorBgElevated,
-        padding: "0 24px",
-      }}
-    >
-      <Row align="middle" justify={sm ? "space-between" : "end"}>
+    <header className="bg-surface-ground border-bottom-1 surface-border p-4">
+      <div className="align-items-center justify-content-between flex">
         <HeaderSearch />
-        <Space size={16} align="center">
+        <div className="align-items-center flex gap-3">
           <LanguageSwitcher />
           <ThemeSwitcher />
           <UserAvatar user={user} />
-        </Space>
-      </Row>
-    </Header>
+        </div>
+      </div>
+    </header>
   );
-};
+});
 
 export default AdminNavbar;

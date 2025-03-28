@@ -1,35 +1,46 @@
 "use client";
 
+import { logoutAction } from "@/app/[lang]/(front)/_actions/logoutAction";
 import { UserEntity } from "@/core/entities/UserEntity";
-import { LogoutOutlined } from "@ant-design/icons";
-import { Avatar, Dropdown, MenuProps, Space, Typography } from "antd";
-import { logoutAction } from "../../app/[lang]/(front)/_actions/logoutAction";
+import { Avatar } from "primereact/avatar";
+import { MenuItem } from "primereact/menuitem";
+import { TieredMenu } from "primereact/tieredmenu";
+import { useRef } from "react";
+
+// Extracted translations
+const translations = {
+  logout: "Logout",
+};
 
 type UserAvatarProps = {
   user: UserEntity | null;
 };
 
 const UserAvatar = ({ user }: UserAvatarProps) => {
-  const items: MenuProps["items"] = [
+  const menu = useRef<TieredMenu>(null);
+
+  const items: MenuItem[] = [
     {
-      key: "1",
-      label: (
-        <Space>
-          <LogoutOutlined />
-          <Typography.Text>Logout</Typography.Text>
-        </Space>
-      ),
-      onClick: async () => {
+      label: translations.logout,
+      icon: "pi pi-sign-out",
+      command: async () => {
         await logoutAction();
       },
     },
   ];
+
   return (
-    <Dropdown menu={{ items }}>
-      <Avatar src={user?.photoURL} size={40}>
-        {user?.email?.charAt(0).toUpperCase()}
-      </Avatar>
-    </Dropdown>
+    <div className="card justify-content-center flex">
+      <TieredMenu model={items} popup ref={menu} breakpoint="767px" />
+      <Avatar
+        image={user?.photoURL}
+        label={user?.email?.charAt(0).toUpperCase()}
+        size="large"
+        shape="circle"
+        onClick={(e) => menu.current?.toggle(e)}
+        className="cursor-pointer"
+      />
+    </div>
   );
 };
 

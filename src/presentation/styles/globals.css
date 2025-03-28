@@ -1,5 +1,1 @@
-@layer reset, theme, base, antd, components, utilities;
-
-@import "tailwindcss/theme.css" layer(theme) important;
-@import "tailwindcss/utilities.css" layer(utilities) important;
-@import "antd/dist/reset.css" layer(reset);
+@import "tailwindcss";
