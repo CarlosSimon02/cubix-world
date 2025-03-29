@@ -1,73 +1,59 @@
+// presentation/contexts/ThemeContext.tsx
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light" | "dark" | "system";
+type Theme = "light" | "dark";
 type ThemeContextType = {
   theme: Theme;
-  resolvedTheme: "light" | "dark";
-  setTheme: (theme: Theme) => void;
-  isSystemTheme: boolean;
+  toggleTheme: () => void;
 };
 
-const ThemeContext = createContext<ThemeContextType | null>(null);
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("system");
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
-  const [mounted, setMounted] = useState(false);
+export function ThemeProvider({
+  children,
+  initialTheme,
+}: {
+  children: React.ReactNode;
+  initialTheme: Theme;
+}) {
+  const [theme, setTheme] = useState<Theme>(initialTheme);
+
+  const applyTheme = (newTheme: Theme) => {
+    const themeLink = document.getElementById("theme-link") as HTMLLinkElement;
+    if (themeLink) {
+      themeLink.href = `/themes/lara-${newTheme}-blue/theme.css`;
+    }
+    document.cookie = `prime-theme=${newTheme}; path=/; max-age=31536000`;
+    setTheme(newTheme);
+  };
 
   useEffect(() => {
-    setMounted(true);
-    const storedTheme = localStorage.getItem("theme") as Theme | null;
-    const systemDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+    // Client-side theme initialization
+    const cookieTheme = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("prime-theme="))
+      ?.split("=")[1] as Theme | undefined;
 
-    const initialTheme = storedTheme || "system";
-    setThemeState(initialTheme);
-    setResolvedTheme(
-      initialTheme === "system" ? (systemDark ? "dark" : "light") : initialTheme
-    );
+    if (!cookieTheme) {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light";
+      applyTheme(systemTheme);
+    }
   }, []);
 
-  useEffect(() => {
-    if (!mounted) return;
-
-    const root = document.documentElement;
-    const systemDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    const newResolvedTheme =
-      theme === "system" ? (systemDark ? "dark" : "light") : theme;
-
-    setResolvedTheme(newResolvedTheme);
-    root.classList.remove("light", "dark");
-    root.classList.add(newResolvedTheme);
-    root.style.setProperty("color-scheme", newResolvedTheme);
-
-    // Load PrimeReact theme
-    const themeLink = document.getElementById("prime-theme") as HTMLLinkElement;
-    if (themeLink) {
-      themeLink.href = `/themes/lara-${newResolvedTheme}-blue/theme.css`;
-    }
-
-    if (theme === "system") {
-      localStorage.removeItem("theme");
-    } else {
-      localStorage.setItem("theme", theme);
-    }
-  }, [theme, mounted]);
-
-  const value = {
-    theme,
-    resolvedTheme,
-    setTheme: (theme: Theme) => setThemeState(theme),
-    isSystemTheme: theme === "system",
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    applyTheme(newTheme);
   };
 
   return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
   );
 }
 

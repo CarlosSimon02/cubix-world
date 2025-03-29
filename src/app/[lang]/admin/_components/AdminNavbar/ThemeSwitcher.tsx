@@ -1,22 +1,22 @@
+// presentation/components/ThemeSwitcher.tsx
 "use client";
 
 import { useTheme } from "@/presentation/contexts/ThemeContext";
 import { Button } from "primereact/button";
 
 export default function ThemeSwitcher() {
-  const { setTheme, resolvedTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
-  const toggleTheme = () => {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark");
-  };
+  const themeIcon = theme === "dark" ? "pi-moon" : "pi-sun";
+  const tooltipText = `Switch to ${theme === "light" ? "dark" : "light"} mode`;
 
   return (
     <Button
-      icon={`pi pi-${resolvedTheme === "dark" ? "sun" : "moon"}`}
+      icon={`pi ${themeIcon}`}
       onClick={toggleTheme}
       className="p-button-rounded p-button-text"
       aria-label="Toggle theme"
-      tooltip={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
+      tooltip={tooltipText}
     />
   );
 }

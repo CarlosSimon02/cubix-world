@@ -5,6 +5,7 @@ import getDictionary from "@/utils/getDictionary";
 import tokensToUserEntity from "@/utils/tokensToUserEntity";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies } from "next/headers";
 import Providers from "../providers";
 
 const geistSans = Geist({
@@ -43,12 +44,26 @@ const RootLayout = async ({ children, params }: Readonly<RootLayoutProps>) => {
   const dictionary = await getDictionary(lang);
   const tokens = await getAuthTokens();
   const user = tokens ? tokensToUserEntity(tokens.decodedToken) : null;
+
+  const cookieStore = await cookies();
+  const themeCookie = cookieStore.get("prime-theme");
+  const initialTheme = (themeCookie?.value as Theme) || "light";
+  const themeName = `lara-${initialTheme}-blue`;
+  const themeHref = `/themes/${themeName}/theme.css`;
+
   return (
     <html lang={lang}>
+      <head>
+        <link id="theme-link" rel="stylesheet" href={themeHref} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers user={user} dictionary={dictionary}>
+        <Providers
+          user={user}
+          dictionary={dictionary}
+          initialTheme={initialTheme}
+        >
           {children}
         </Providers>
       </body>

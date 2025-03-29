@@ -7,13 +7,12 @@ import { ThemeProvider } from "@/presentation/contexts/ThemeContext";
 import { ToastProvider } from "@/presentation/contexts/ToastContext";
 import { Dictionary } from "@/types/dictionary.type";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import dynamic from "next/dynamic";
-import { PrimeReactProvider } from "primereact/api";
 
 type ProvidersProps = {
   children: React.ReactNode;
   user: UserEntity | null;
   dictionary: Dictionary;
+  initialTheme: Theme;
 };
 
 const queryClient = new QueryClient({
@@ -24,26 +23,19 @@ const queryClient = new QueryClient({
   },
 });
 
-const DynamicThemeLoader = dynamic(
-  () => import("@/presentation/components/ThemeLoader"),
-  {
-    ssr: false,
-  }
-);
-
-const Providers = ({ user, dictionary, children }: ProvidersProps) => {
+const Providers = ({
+  user,
+  dictionary,
+  children,
+  initialTheme,
+}: ProvidersProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider user={user}>
         <DictionaryProvider dictionary={dictionary}>
-          <PrimeReactProvider>
-            <ToastProvider>
-              <ThemeProvider>
-                <DynamicThemeLoader />
-                {children}
-              </ThemeProvider>
-            </ToastProvider>
-          </PrimeReactProvider>
+          <ThemeProvider initialTheme={initialTheme}>
+            <ToastProvider>{children}</ToastProvider>
+          </ThemeProvider>
         </DictionaryProvider>
       </AuthProvider>
     </QueryClientProvider>
