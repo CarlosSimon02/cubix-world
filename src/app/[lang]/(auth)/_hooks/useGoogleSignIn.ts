@@ -1,7 +1,7 @@
 "use client";
 
 import { signInWithGoogleFactory } from "@/factories/auth/signInWithGoogleFactory";
-import { useRedirectParam } from "@/presentation/hooks/useRedirectParam";
+import useRedirectParam from "@/presentation/hooks/useRedirectParam";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";

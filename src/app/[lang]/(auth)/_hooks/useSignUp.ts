@@ -2,7 +2,7 @@
 
 import { AuthCredentials } from "@/data/models/authModel";
 import { signUpWithEmailFactory } from "@/factories/auth/signUpWithEmailFactory";
-import { useRedirectParam } from "@/presentation/hooks/useRedirectParam";
+import useRedirectParam from "@/presentation/hooks/useRedirectParam";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";

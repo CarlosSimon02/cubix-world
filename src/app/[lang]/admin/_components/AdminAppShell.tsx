@@ -3,9 +3,10 @@
 import { UserEntity } from "@/core/entities/UserEntity";
 import { UserAvatar } from "@/presentation/components/UserAvatar";
 import withClientAuth from "@/utils/withClientAuth";
-import { AppShell, Burger, Group, Skeleton } from "@mantine/core";
+import { AppShell, Burger, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { MantineLogo } from "@mantinex/mantine-logo";
+import AdminNavbar from "./AdminNavbar";
 import HeaderSearch from "./HeaderSearch";
 import LanguageSwitcher from "./LanguageSwitcher";
 import ThemeSwitcher from "./ThemeSwitcher";
@@ -54,14 +55,7 @@ const AdminAppShell = withClientAuth<AdminAppShellProps>(
             <UserAvatar user={user} />
           </Group>
         </AppShell.Header>
-        <AppShell.Navbar p="md">
-          Navbar
-          {Array(15)
-            .fill(0)
-            .map((_, index) => (
-              <Skeleton key={index} h={28} mt="sm" animate={false} />
-            ))}
-        </AppShell.Navbar>
+        <AdminNavbar />
         <AppShell.Main className="dark:bg-dark-900 bg-gray-100">
           {children}
         </AppShell.Main>
