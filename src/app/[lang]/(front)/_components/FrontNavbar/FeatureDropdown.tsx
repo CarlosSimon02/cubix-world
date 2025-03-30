@@ -78,7 +78,7 @@ export const FeatureDropdown = ({ features }: FeatureDropdownProps) => {
           {featureLinks}
         </SimpleGrid>
 
-        <div className="dark:bg-dark-700 -m-md mt-sm py-md pb-xl dark:border-dark-5 border-t border-gray-100 bg-gray-50 px-[calc(var(--mantine-spacing-md)*2)]">
+        <div className="dark:bg-dark-700 -m-md mt-sm py-md pb-xl dark:border-dark-500 border-t border-gray-100 bg-gray-50 px-[calc(var(--mantine-spacing-md)*2)]">
           <Group justify="space-between">
             <div>
               <Text fw={500} fz="sm">
