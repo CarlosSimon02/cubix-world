@@ -22,12 +22,12 @@ export interface ISalesChart {
 }
 
 export interface IOrderStatus {
-  id: number;
+  id: string;
   text: "Pending" | "Ready" | "On The Way" | "Delivered" | "Cancelled";
 }
 
 export interface IUser {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   fullName: string;
@@ -40,7 +40,7 @@ export interface IUser {
 }
 
 export interface IIdentity {
-  id: number;
+  id: string;
   name: string;
   avatar: string;
 }
@@ -66,7 +66,7 @@ export interface IEvent {
 }
 
 export interface IStore {
-  id: number;
+  id: string;
   title: string;
   isActive: boolean;
   createdAt: string;
@@ -77,12 +77,12 @@ export interface IStore {
 }
 
 export interface ICourierStatus {
-  id: number;
+  id: string;
   text: "Available" | "Offline" | "On delivery";
 }
 
 export interface ICourier {
-  id: number;
+  id: string;
   name: string;
   surname: string;
   email: string;
@@ -99,7 +99,7 @@ export interface ICourier {
 }
 
 export interface IOrder {
-  id: number;
+  id: string;
   user: IUser;
   createdAt: string;
   products: IProduct[];
@@ -113,7 +113,7 @@ export interface IOrder {
 }
 
 export interface IProduct {
-  id: number;
+  id: string;
   name: string;
   isActive: boolean;
   description: string;
@@ -121,14 +121,14 @@ export interface IProduct {
   createdAt: string;
   price: number;
   category: {
-    id: number;
+    id: string;
     title: string;
   };
   stock: number;
 }
 
 export interface ICategory {
-  id: number;
+  id: string;
   title: string;
   isActive: boolean;
 }
@@ -150,7 +150,7 @@ export interface IUserFilterVariables {
 }
 
 export interface IReview {
-  id: number;
+  id: string;
   order: IOrder;
   user: IUser;
   star: number;
@@ -165,11 +165,11 @@ export type IVehicle = {
   engineSize: number;
   color: string;
   year: number;
-  id: number;
+  id: string;
 };
 
 export interface ITrendingProducts {
-  id: number;
+  id: string;
   product: IProduct;
   orderCount: number;
 }

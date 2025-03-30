@@ -33,18 +33,18 @@ const generateAddress = (): IAddress => ({
 });
 
 // Generate Categories first (15 items)
-const categories: ICategory[] = Array.from({ length: 15 }, (_, i) => ({
-  id: i + 1,
+const categories: ICategory[] = Array.from({ length: 15 }, () => ({
+  id: faker.string.uuid(),
   title: faker.commerce.department(),
   isActive: faker.datatype.boolean(),
 }));
 
 // Generate Products (1000 items)
-const products: IProduct[] = Array.from({ length: 1000 }, (_, i) => {
+const products: IProduct[] = Array.from({ length: 1000 }, () => {
   const category = faker.helpers.arrayElement(categories);
 
   return {
-    id: i + 1,
+    id: faker.string.uuid(),
     name: faker.commerce.productName(),
     isActive: faker.datatype.boolean(),
     description: faker.commerce.productDescription(),
@@ -63,12 +63,12 @@ const products: IProduct[] = Array.from({ length: 1000 }, (_, i) => {
 });
 
 // Generate Users (1000 items)
-const users: IUser[] = Array.from({ length: 1000 }, (_, i) => {
+const users: IUser[] = Array.from({ length: 1000 }, () => {
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
 
   return {
-    id: i + 1,
+    id: faker.string.uuid(),
     firstName,
     lastName,
     fullName: `${firstName} ${lastName}`,
@@ -82,8 +82,8 @@ const users: IUser[] = Array.from({ length: 1000 }, (_, i) => {
 });
 
 // Generate Couriers (1000 items)
-const couriers: ICourier[] = Array.from({ length: 1000 }, (_, i) => ({
-  id: i + 1,
+const couriers: ICourier[] = Array.from({ length: 1000 }, () => ({
+  id: faker.string.uuid(),
   name: faker.person.firstName(),
   surname: faker.person.lastName(),
   email: faker.internet.email(),
@@ -95,17 +95,17 @@ const couriers: ICourier[] = Array.from({ length: 1000 }, (_, i) => ({
   address: faker.location.streetAddress(),
   avatar: Array.from({ length: 3 }, generateFile),
   store: {
-    id: faker.number.int({ min: 1, max: 50 }),
+    id: faker.string.uuid(),
     title: faker.company.name(),
     isActive: faker.datatype.boolean(),
     createdAt: faker.date.past({ years: 2 }).toISOString(),
     gsm: faker.phone.number(),
     email: faker.internet.email(),
     address: generateAddress(),
-    products: [], // Will be populated in orders
+    products: [],
   },
   status: {
-    id: faker.number.int({ min: 1, max: 3 }),
+    id: faker.string.uuid(),
     text: faker.helpers.arrayElement(["Available", "Offline", "On delivery"]),
   },
   vehicle: {
@@ -114,21 +114,21 @@ const couriers: ICourier[] = Array.from({ length: 1000 }, (_, i) => ({
     engineSize: faker.number.float({ min: 1.0, max: 5.0 }),
     color: faker.vehicle.color(),
     year: faker.date.past({ years: 10 }).getFullYear(),
-    id: faker.number.int(),
+    id: faker.string.uuid(),
   },
 }));
 
 // Generate Orders (1000 items)
-const orders: IOrder[] = Array.from({ length: 1000 }, (_, i) => {
+const orders: IOrder[] = Array.from({ length: 1000 }, () => {
   const orderProducts = faker.helpers.arrayElements(products, 3);
 
   return {
-    id: i + 1,
+    id: faker.string.uuid(),
     user: faker.helpers.arrayElement(users),
     createdAt: faker.date.recent({ days: 30 }).toISOString(),
     products: orderProducts,
     status: {
-      id: faker.number.int({ min: 1, max: 5 }),
+      id: faker.string.uuid(),
       text: faker.helpers.arrayElement([
         "Pending",
         "Ready",
@@ -139,7 +139,7 @@ const orders: IOrder[] = Array.from({ length: 1000 }, (_, i) => {
     },
     adress: generateAddress(),
     store: {
-      id: faker.number.int({ min: 1, max: 50 }),
+      id: faker.string.uuid(),
       title: faker.company.name(),
       isActive: faker.datatype.boolean(),
       createdAt: faker.date.past({ years: 2 }).toISOString(),
@@ -162,8 +162,8 @@ const orders: IOrder[] = Array.from({ length: 1000 }, (_, i) => {
   };
 });
 
-const stores: IStore[] = Array.from({ length: 50 }, (_, i) => ({
-  id: i + 1,
+const stores: IStore[] = Array.from({ length: 50 }, () => ({
+  id: faker.string.uuid(),
   title: faker.company.name(),
   isActive: faker.datatype.boolean(),
   createdAt: faker.date.past({ years: 2 }).toISOString(),

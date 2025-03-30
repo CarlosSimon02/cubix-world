@@ -100,7 +100,7 @@ export async function middleware(request: NextRequest) {
       }
       if (isPrivatePath && !decodedToken) {
         return redirectToLogin(request, {
-          path: "/login",
+          path: `/${getLocale(request)}/login`,
           publicPaths: PUBLIC_PATHS,
         });
       }
@@ -112,14 +112,14 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
       }
       return redirectToLogin(request, {
-        path: "/login",
+        path: `/${getLocale(request)}/login`,
         publicPaths: PUBLIC_PATHS,
       });
     },
     handleError: async (error) => {
       console.error("Unhandled authentication error", { error });
       return redirectToLogin(request, {
-        path: "/login",
+        path: `/${getLocale(request)}/login`,
         publicPaths: PUBLIC_PATHS,
       });
     },

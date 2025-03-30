@@ -1,7 +1,5 @@
 import Footer from "@/presentation/components/Footer";
-import ContentContainer from "./_components/ContentContainer";
 import FrontNavbar from "./_components/FrontNavbar";
-import MainLayoutContainer from "./_components/MainLayoutContainer";
 
 type FrontLayoutProps = {
   children: React.ReactNode;
@@ -9,11 +7,11 @@ type FrontLayoutProps = {
 
 const FrontLayout = ({ children }: FrontLayoutProps) => {
   return (
-    <MainLayoutContainer>
+    <div className="flex min-h-screen flex-col">
       <FrontNavbar />
-      <ContentContainer>{children}</ContentContainer>
+      <div className="flex-1">{children}</div>
       <Footer />
-    </MainLayoutContainer>
+    </div>
   );
 };
 

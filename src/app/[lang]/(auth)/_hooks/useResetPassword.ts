@@ -1,12 +1,11 @@
 "use client";
 
 import { resetPasswordFactory } from "@/factories/auth/resetPasswordFactory";
-import { useToast } from "@/presentation/contexts/ToastContext";
+import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 
 export const useResetPassword = () => {
   const resetPassword = resetPasswordFactory();
-  const { showError } = useToast();
 
   const resetPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
@@ -18,10 +17,18 @@ export const useResetPassword = () => {
       }
     },
     onSuccess: () => {
-      showError("Password reset email sent successfully!");
+      notifications.show({
+        title: "Password reset email sent successfully!",
+        message: "Check your email for a reset link.",
+        color: "green",
+      });
     },
     onError: (error: Error) => {
-      showError("Failed to send reset email");
+      notifications.show({
+        title: "Password reset failed",
+        message: "Something went wrong. Unable to reset password.",
+        color: "red",
+      });
       console.error("Password reset error:", error);
     },
   });

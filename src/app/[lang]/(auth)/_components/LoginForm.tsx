@@ -1,12 +1,20 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { Button } from "primereact/button";
-import { Divider } from "primereact/divider";
-import { InputText } from "primereact/inputtext";
-import { classNames } from "primereact/utils";
-import { useForm } from "react-hook-form";
+import LocaleLink from "@/presentation/components/LocaleLink";
+import {
+  Anchor,
+  Box,
+  Button,
+  Divider,
+  Group,
+  Input,
+  PasswordInput,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { IconBrandGoogle } from "@tabler/icons-react";
+import { zodResolver } from "mantine-form-zod-resolver";
 import { z } from "zod";
 import { useGoogleSignIn } from "../_hooks/useGoogleSignIn";
 import { useLogin } from "../_hooks/useLogin";
@@ -14,7 +22,8 @@ import AuthLayout from "./AuthLayout";
 
 const translations = {
   form: {
-    title: "Log In",
+    title: "Welcome back!",
+    description: "Enter your email and password to log in.",
     emailLabel: "Email Address",
     emailPlaceholder: "Enter your email",
     passwordLabel: "Password",
@@ -51,12 +60,12 @@ const LoginForm = () => {
   const loginMutation = useLogin();
   const googleSignInMutation = useGoogleSignIn();
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<FormValues>({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validate: zodResolver(formSchema),
   });
 
   const onSubmit = async (data: FormValues) => {
@@ -75,92 +84,85 @@ const LoginForm = () => {
   const isSuccess = loginMutation.isSuccess || googleSignInMutation.isSuccess;
 
   return (
-    <AuthLayout title={translations.form.title}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="field">
-          <label
-            htmlFor="email"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
-            {translations.form.emailLabel}
-          </label>
-          <InputText
-            id="email"
-            {...register("email")}
-            placeholder={translations.form.emailPlaceholder}
-            disabled={isLoading || isSuccess}
-            className={classNames("w-full", { "p-invalid": errors.email })}
-          />
-          {errors.email && (
-            <small className="p-error">{errors.email.message}</small>
-          )}
-        </div>
+    <AuthLayout
+      title={translations.form.title}
+      description={translations.form.description}
+    >
+      <Box
+        component="form"
+        onSubmit={form.onSubmit(onSubmit)}
+        className="space-y-4"
+      >
+        <TextInput
+          label={translations.form.emailLabel}
+          placeholder={translations.form.emailPlaceholder}
+          {...form.getInputProps("email")}
+          disabled={isLoading || isSuccess}
+          withAsterisk
+        />
 
-        <div className="field">
-          <div className="mb-2 flex items-center justify-between">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              {translations.form.passwordLabel}
-            </label>
-            <Link href="/forgot-password" passHref>
-              <Button
-                type="button"
-                label={translations.form.forgotPassword}
-                className="p-button-link p-0 text-sm"
-              />
-            </Link>
-          </div>
-          <InputText
-            id="password"
-            {...register("password")}
-            type="password"
-            placeholder={translations.form.passwordPlaceholder}
-            disabled={isLoading || isSuccess}
-            className={classNames("w-full", { "p-invalid": errors.password })}
-          />
-          {errors.password && (
-            <small className="p-error">{errors.password.message}</small>
-          )}
-        </div>
+        <PasswordInput
+          classNames={{ label: "w-full" }}
+          label={
+            <Group justify="space-between">
+              <Input.Label required className="!w-fit">
+                {translations.form.passwordLabel}
+              </Input.Label>
+              <Anchor
+                component={LocaleLink}
+                href="/forgot-password"
+                variant="subtle"
+                size="xs"
+                px={0}
+              >
+                {translations.form.forgotPassword}
+              </Anchor>
+            </Group>
+          }
+          placeholder={translations.form.passwordPlaceholder}
+          type="password"
+          {...form.getInputProps("password")}
+          disabled={isLoading || isSuccess}
+        />
 
         <Button
           type="submit"
-          label={translations.form.submitButton}
-          className="w-full"
+          fullWidth
           loading={loginMutation.isPending}
           disabled={isSuccess || googleSignInMutation.isPending}
+        >
+          {translations.form.submitButton}
+        </Button>
+
+        <Divider
+          label={translations.form.dividerText}
+          labelPosition="center"
+          my="md"
         />
 
-        <Divider align="center">
-          <span className="text-sm text-gray-500">
-            {translations.form.dividerText}
-          </span>
-        </Divider>
-
         <Button
-          label={translations.form.googleButton}
-          icon="pi pi-google"
-          className="w-full"
+          leftSection={<IconBrandGoogle size="1rem" />}
+          variant="outline"
+          fullWidth
           loading={googleSignInMutation.isPending}
           disabled={isSuccess || loginMutation.isPending}
           onClick={handleGoogleSignIn}
-        />
+        >
+          {translations.form.googleButton}
+        </Button>
 
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
-            {translations.form.signUpPrompt}{" "}
-            <Link href="/signup" passHref>
-              <Button
-                type="button"
-                label={translations.form.signUpLink}
-                className="p-button-link p-0"
-              />
-            </Link>
-          </p>
-        </div>
-      </form>
+        <Text c="dimmed" size="sm" ta="center" mt="md">
+          {translations.form.signUpPrompt}{" "}
+          <Anchor
+            component={LocaleLink}
+            href="/signup"
+            variant="subtle"
+            size="sm"
+          >
+            {translations.form.signUpLink}
+          </Anchor>
+        </Text>
+      </Box>
     </AuthLayout>
   );
 };

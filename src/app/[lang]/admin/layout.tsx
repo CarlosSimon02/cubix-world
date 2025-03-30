@@ -1,16 +1,11 @@
-import AdminNavbar from "./_components/AdminNavbar";
+import AdminAppShell from "./_components/AdminAppShell";
 
 type AdminLayoutProps = {
   children: React.ReactNode;
 };
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
-  return (
-    <div>
-      <AdminNavbar />
-      {children}
-    </div>
-  );
+  return <AdminAppShell>{children}</AdminAppShell>;
 };
 
 export default AdminLayout;

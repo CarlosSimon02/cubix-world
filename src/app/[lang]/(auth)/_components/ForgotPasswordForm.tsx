@@ -1,17 +1,25 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import LocaleLink from "@/presentation/components/LocaleLink";
+import {
+  Alert,
+  Anchor,
+  Box,
+  Button,
+  Center,
+  Group,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { IconArrowLeft, IconCheck } from "@tabler/icons-react";
+import { zodResolver } from "mantine-form-zod-resolver";
 import Link from "next/link";
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
-import { classNames } from "primereact/utils";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useResetPassword } from "../_hooks/useResetPassword";
 import AuthLayout from "./AuthLayout";
 
-// Translation strings
 const translations = {
   form: {
     title: "Reset Password",
@@ -30,14 +38,13 @@ const translations = {
   success: {
     title: "Check your email",
     message: "We've sent a password reset link to",
-    backToSignIn: "Back to sign in",
+    backToSignIn: "Back to the login page",
   },
   errors: {
     submissionFailed: "Submission failed:",
   },
 };
 
-// Define Zod schema for form validation
 const formSchema = z.object({
   email: z
     .string()
@@ -53,12 +60,11 @@ const ForgotPasswordForm = () => {
 
   const resetPasswordMutation = useResetPassword();
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<FormValues>({
+    initialValues: {
+      email: "",
+    },
+    validate: zodResolver(formSchema),
   });
 
   const onSubmit = async (data: FormValues) => {
@@ -83,66 +89,66 @@ const ForgotPasswordForm = () => {
       description={translations.form.description}
     >
       {isSubmitted ? (
-        <div className="mt-6 text-center">
-          <div className="mb-4 inline-flex items-center justify-center rounded-full bg-green-100 p-3 text-green-500">
-            <i className="pi pi-check" style={{ fontSize: "1.5rem" }}></i>
-          </div>
-          <h2 className="mb-2 text-2xl font-bold">
-            {translations.success.title}
-          </h2>
-          <p className="text-gray-600">
-            {translations.success.message} {submittedEmail}
-          </p>
-          <div className="mt-6">
-            <Link
+        <Box className="text-center">
+          <Alert
+            variant="light"
+            color="green"
+            title={translations.success.title}
+            icon={<IconCheck size="1.5rem" />}
+            className="mb-4"
+          >
+            <Text>
+              {translations.success.message} {submittedEmail}
+            </Text>
+          </Alert>
+          <Group justify="center" mt="md">
+            <Button
+              component={Link}
               href="/login"
-              className="text-primary-600 hover:text-primary-800 hover:underline"
+              variant="subtle"
+              leftSection={<IconArrowLeft size="1rem" />}
             >
               {translations.success.backToSignIn}
-            </Link>
-          </div>
-        </div>
+            </Button>
+          </Group>
+        </Box>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
-          <div className="field">
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm font-medium text-gray-700"
-            >
-              {translations.form.emailLabel}
-            </label>
-            <InputText
-              id="email"
-              {...register("email")}
-              placeholder={translations.form.emailPlaceholder}
-              disabled={isLoading || isSuccess}
-              className={classNames("w-full", { "p-invalid": errors.email })}
-            />
-            {errors.email && (
-              <small className="p-error">{errors.email.message}</small>
-            )}
-          </div>
-
-          <Button
-            type="submit"
-            label={translations.form.submitButton}
-            className="w-full"
-            loading={isLoading}
-            disabled={isSuccess}
+        <form onSubmit={form.onSubmit(onSubmit)} className="space-y-6">
+          <TextInput
+            label={translations.form.emailLabel}
+            placeholder={translations.form.emailPlaceholder}
+            disabled={isLoading || isSuccess}
+            error={form.errors.email}
+            withAsterisk
+            {...form.getInputProps("email")}
           />
 
-          <div className="mt-4 text-center">
-            <p className="text-gray-600">
-              {translations.form.rememberPassword}{" "}
-              <Link href="/login" passHref>
-                <Button
-                  type="button"
-                  label={translations.form.backToSignIn}
-                  className="p-button-link p-0"
-                />
-              </Link>
-            </p>
-          </div>
+          <Group
+            justify="space-between"
+            mt="lg"
+            className="max-xs:flex-col-reverse"
+          >
+            <Anchor
+              c="dimmed"
+              size="sm"
+              className="max-xs:w-full max-xs:text-center"
+              component={LocaleLink}
+              href="/login"
+            >
+              <Center inline>
+                <IconArrowLeft size={12} stroke={1.5} />
+                <Box ml={5}>{translations.form.backToSignIn}</Box>
+              </Center>
+            </Anchor>
+            <Button
+              type="submit"
+              className="max-xs:w-full max-xs:text-center"
+              loading={isLoading}
+              disabled={isSuccess}
+            >
+              {translations.form.submitButton}
+            </Button>
+          </Group>
         </form>
       )}
     </AuthLayout>

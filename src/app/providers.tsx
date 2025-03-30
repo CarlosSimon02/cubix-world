@@ -2,17 +2,17 @@
 
 import { UserEntity } from "@/core/entities/UserEntity";
 import { AuthProvider } from "@/presentation/contexts/AuthContext";
+import { CustomMantineProvider } from "@/presentation/contexts/CustomMantimeContext";
 import DictionaryProvider from "@/presentation/contexts/DictionaryContext";
-import { ThemeProvider } from "@/presentation/contexts/ThemeContext";
-import { ToastProvider } from "@/presentation/contexts/ToastContext";
 import { Dictionary } from "@/types/dictionary.type";
+import { Locale } from "@/types/locale.type";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 type ProvidersProps = {
   children: React.ReactNode;
   user: UserEntity | null;
   dictionary: Dictionary;
-  initialTheme: Theme;
+  currentLocale: Locale;
 };
 
 const queryClient = new QueryClient({
@@ -27,15 +27,16 @@ const Providers = ({
   user,
   dictionary,
   children,
-  initialTheme,
+  currentLocale,
 }: ProvidersProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider user={user}>
-        <DictionaryProvider dictionary={dictionary}>
-          <ThemeProvider initialTheme={initialTheme}>
-            <ToastProvider>{children}</ToastProvider>
-          </ThemeProvider>
+        <DictionaryProvider
+          dictionary={dictionary}
+          currentLocale={currentLocale}
+        >
+          <CustomMantineProvider>{children}</CustomMantineProvider>
         </DictionaryProvider>
       </AuthProvider>
     </QueryClientProvider>

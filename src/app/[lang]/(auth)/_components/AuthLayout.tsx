@@ -1,6 +1,4 @@
-"use client";
-
-import { Card } from "primereact/card";
+import { Container, Paper, Text, Title } from "@mantine/core";
 import { ReactNode } from "react";
 
 type AuthLayoutProps = {
@@ -11,15 +9,17 @@ type AuthLayoutProps = {
 
 const AuthLayout = ({ children, title, description }: AuthLayoutProps) => {
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card
-        title={title}
-        subTitle={description}
-        className="mx-auto w-full max-w-xs gap-4"
-      >
+    <Container size={420} my={40}>
+      <Title ta="center" className="text-2xl font-black">
+        {title}
+      </Title>
+      <Text c="dimmed" size="sm" ta="center" mt={5}>
+        {description}
+      </Text>
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         {children}
-      </Card>
-    </div>
+      </Paper>
+    </Container>
   );
 };
 

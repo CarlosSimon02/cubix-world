@@ -1,12 +1,10 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { Button } from "primereact/button";
-import { Divider } from "primereact/divider";
-import { InputText } from "primereact/inputtext";
-import { classNames } from "primereact/utils";
-import { useForm } from "react-hook-form";
+import LocaleLink from "@/presentation/components/LocaleLink";
+import { Anchor, Box, Button, Divider, Text, TextInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { IconBrandGoogle } from "@tabler/icons-react";
+import { zodResolver } from "mantine-form-zod-resolver";
 import { z } from "zod";
 import { useGoogleSignIn } from "../_hooks/useGoogleSignIn";
 import { useSignUp } from "../_hooks/useSignUp";
@@ -15,6 +13,7 @@ import AuthLayout from "./AuthLayout";
 const translations = {
   form: {
     title: "Create Your Account",
+    description: "Enter your email and password to sign up.",
     nameLabel: "Full Name",
     namePlaceholder: "Enter your name",
     emailLabel: "Email Address",
@@ -53,17 +52,18 @@ const SignUpForm = () => {
   const signUpMutation = useSignUp();
   const googleSignInMutation = useGoogleSignIn();
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<FormValues>({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+    validate: zodResolver(formSchema),
   });
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (values: FormValues) => {
     try {
-      await signUpMutation.mutateAsync(data);
+      await signUpMutation.mutateAsync(values);
     } catch (error) {
       console.log(translations.errors.validationFailed, error);
     }
@@ -77,102 +77,79 @@ const SignUpForm = () => {
   const isSuccess = signUpMutation.isSuccess || googleSignInMutation.isSuccess;
 
   return (
-    <AuthLayout title={translations.form.title}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="field">
-          <label
-            htmlFor="name"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
-            {translations.form.nameLabel}
-          </label>
-          <InputText
-            id="name"
-            {...register("name")}
-            placeholder={translations.form.namePlaceholder}
-            disabled={isLoading || isSuccess}
-            className={classNames("w-full", { "p-invalid": errors.name })}
-          />
-          {errors.name && (
-            <small className="p-error">{errors.name.message}</small>
-          )}
-        </div>
+    <AuthLayout
+      title={translations.form.title}
+      description={translations.form.description}
+    >
+      <Box
+        component="form"
+        onSubmit={form.onSubmit(onSubmit)}
+        className="space-y-4"
+      >
+        <TextInput
+          label={translations.form.nameLabel}
+          placeholder={translations.form.namePlaceholder}
+          {...form.getInputProps("name")}
+          disabled={isLoading || isSuccess}
+          required
+        />
 
-        <div className="field">
-          <label
-            htmlFor="email"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
-            {translations.form.emailLabel}
-          </label>
-          <InputText
-            id="email"
-            {...register("email")}
-            placeholder={translations.form.emailPlaceholder}
-            disabled={isLoading || isSuccess}
-            className={classNames("w-full", { "p-invalid": errors.email })}
-          />
-          {errors.email && (
-            <small className="p-error">{errors.email.message}</small>
-          )}
-        </div>
+        <TextInput
+          label={translations.form.emailLabel}
+          placeholder={translations.form.emailPlaceholder}
+          {...form.getInputProps("email")}
+          disabled={isLoading || isSuccess}
+          required
+        />
 
-        <div className="field">
-          <label
-            htmlFor="password"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
-            {translations.form.passwordLabel}
-          </label>
-          <InputText
-            id="password"
-            {...register("password")}
-            type="password"
-            placeholder={translations.form.passwordPlaceholder}
-            disabled={isLoading || isSuccess}
-            className={classNames("w-full", { "p-invalid": errors.password })}
-          />
-          {errors.password && (
-            <small className="p-error">{errors.password.message}</small>
-          )}
-        </div>
+        <TextInput
+          label={translations.form.passwordLabel}
+          placeholder={translations.form.passwordPlaceholder}
+          type="password"
+          {...form.getInputProps("password")}
+          disabled={isLoading || isSuccess}
+          required
+        />
 
         <Button
           type="submit"
-          label={translations.form.submitButton}
-          className="w-full"
+          fullWidth
           loading={signUpMutation.isPending}
           disabled={isSuccess || googleSignInMutation.isPending}
+        >
+          {translations.form.submitButton}
+        </Button>
+
+        <Divider
+          label={translations.form.dividerText}
+          labelPosition="center"
+          my="md"
         />
 
-        <Divider align="center">
-          <span className="text-sm text-gray-500">
-            {translations.form.dividerText}
-          </span>
-        </Divider>
-
         <Button
-          label={translations.form.googleButton}
-          icon="pi pi-google"
-          className="w-full"
+          leftSection={<IconBrandGoogle size="1rem" />}
+          variant="outline"
+          fullWidth
           loading={googleSignInMutation.isPending}
           disabled={isSuccess || signUpMutation.isPending}
           onClick={handleGoogleSignIn}
-        />
+        >
+          {translations.form.googleButton}
+        </Button>
 
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
-            {translations.form.loginPrompt}{" "}
-            <Link href="/login" passHref>
-              <Button
-                type="button"
-                label={translations.form.loginLink}
-                className="p-button-link p-0"
-              />
-            </Link>
-          </p>
-        </div>
-      </form>
+        <Text c="dimmed" size="sm" ta="center" mt="md">
+          {translations.form.loginPrompt}{" "}
+          <Anchor
+            component={LocaleLink}
+            href="/login"
+            variant="subtle"
+            size="sm"
+            px={0}
+          >
+            {translations.form.loginLink}
+          </Anchor>
+        </Text>
+      </Box>
     </AuthLayout>
   );
 };
