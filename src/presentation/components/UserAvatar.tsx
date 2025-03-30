@@ -1,51 +1,3 @@
-// "use client";
-
-// import { logoutAction } from "@/app/[lang]/(front)/_actions/logoutAction";
-// import { UserEntity } from "@/core/entities/UserEntity";
-// import { Avatar } from "primereact/avatar";
-// import { MenuItem } from "primereact/menuitem";
-// import { TieredMenu } from "primereact/tieredmenu";
-// import { useRef } from "react";
-
-// // Extracted translations
-// const translations = {
-//   logout: "Logout",
-// };
-
-// type UserAvatarProps = {
-//   user: UserEntity | null;
-// };
-
-// const UserAvatar = ({ user }: UserAvatarProps) => {
-//   const menu = useRef<TieredMenu>(null);
-
-//   const items: MenuItem[] = [
-//     {
-//       label: translations.logout,
-//       icon: "pi pi-sign-out",
-//       command: async () => {
-//         await logoutAction();
-//       },
-//     },
-//   ];
-
-//   return (
-//     <div className="card justify-content-center flex">
-//       <TieredMenu model={items} popup ref={menu} breakpoint="767px" />
-//       <Avatar
-//         image={user?.photoURL}
-//         label={user?.email?.charAt(0).toUpperCase()}
-//         size="large"
-//         shape="circle"
-//         onClick={(e) => menu.current?.toggle(e)}
-//         className="cursor-pointer"
-//       />
-//     </div>
-//   );
-// };
-
-// export default UserAvatar;
-
 "use client";
 
 import { logoutAction } from "@/app/[lang]/(front)/_actions/logoutAction";
@@ -54,9 +6,11 @@ import getInitials from "@/utils/getInitials";
 import { Avatar, Group, Menu, Text, UnstyledButton } from "@mantine/core";
 import {
   IconChevronRight,
+  IconHome,
   IconLogout,
   IconSettings,
 } from "@tabler/icons-react";
+import { usePathname } from "next/navigation";
 import LocaleLink from "./LocaleLink";
 
 interface UserAvatarProps {
@@ -78,6 +32,9 @@ const MyAvatar = ({ user }: UserAvatarProps) => {
 };
 
 export function UserAvatar({ user, hasLabel }: UserAvatarProps) {
+  const pathname = usePathname();
+  const isAdminPage = pathname?.includes("/admin");
+
   return (
     <Menu width={260} position="bottom-end" withArrow withinPortal={false}>
       <Menu.Target>
@@ -123,13 +80,23 @@ export function UserAvatar({ user, hasLabel }: UserAvatarProps) {
 
         <Menu.Divider />
 
-        <Menu.Item
-          component={LocaleLink}
-          href="/admin"
-          leftSection={<IconSettings size={14} />}
-        >
-          Admin
-        </Menu.Item>
+        {isAdminPage ? (
+          <Menu.Item
+            component={LocaleLink}
+            href="/"
+            leftSection={<IconHome size={14} />}
+          >
+            Home
+          </Menu.Item>
+        ) : (
+          <Menu.Item
+            component={LocaleLink}
+            href="/admin"
+            leftSection={<IconSettings size={14} />}
+          >
+            Admin
+          </Menu.Item>
+        )}
 
         <Menu.Item
           leftSection={<IconLogout size={14} />}
