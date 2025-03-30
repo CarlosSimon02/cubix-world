@@ -45,7 +45,7 @@ const AdminNavbar = () => {
           "dark:text-dark-100 py-xs px-sm flex items-center rounded-sm text-sm font-medium",
           isActive
             ? "bg-primary-light !text-primary-light-color"
-            : "hover:bg-gray-0 dark:hover:bg-dark-600 text-gray-700 hover:text-black dark:hover:text-white"
+            : "dark:hover:bg-dark-600 text-gray-700 hover:bg-gray-50 hover:text-black dark:hover:text-white"
         )}
         href={item.link}
         key={item.label}
