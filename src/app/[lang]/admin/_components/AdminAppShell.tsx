@@ -3,7 +3,7 @@
 import { UserEntity } from "@/core/entities/UserEntity";
 import { UserAvatar } from "@/presentation/components/UserAvatar";
 import withClientAuth from "@/utils/withClientAuth";
-import { AppShell, Burger, Group } from "@mantine/core";
+import { AppShell, Burger, Container, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { MantineLogo } from "@mantinex/mantine-logo";
 import AdminNavbar from "./AdminNavbar";
@@ -23,13 +23,13 @@ const AdminAppShell = withClientAuth<AdminAppShellProps>(
 
     return (
       <AppShell
+        padding="md"
         header={{ height: 60 }}
         navbar={{
           width: 300,
           breakpoint: "sm",
           collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
         }}
-        padding="md"
       >
         <AppShell.Header className="flex justify-between pr-4">
           <Group h="100%" px="md">
@@ -57,7 +57,7 @@ const AdminAppShell = withClientAuth<AdminAppShellProps>(
         </AppShell.Header>
         <AdminNavbar />
         <AppShell.Main className="dark:bg-dark-900 bg-gray-100">
-          {children}
+          <Container p={0}>{children}</Container>
         </AppShell.Main>
       </AppShell>
     );

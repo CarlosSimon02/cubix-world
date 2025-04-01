@@ -3,7 +3,8 @@ import { Locale } from "@/types/locale.type";
 import getAuthTokens from "@/utils/getAuthTokens";
 import getDictionary from "@/utils/getDictionary";
 import tokensToUserEntity from "@/utils/tokensToUserEntity";
-import { ColorSchemeScript } from "@mantine/core";
+import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
+import "mantine-datatable/styles.layer.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Providers from "../providers";
@@ -46,7 +47,7 @@ const RootLayout = async ({ children, params }: Readonly<RootLayoutProps>) => {
   const user = tokens ? tokensToUserEntity(tokens.decodedToken) : null;
 
   return (
-    <html lang={lang} suppressHydrationWarning>
+    <html lang={lang} {...mantineHtmlProps}>
       <head>
         <ColorSchemeScript />
       </head>
