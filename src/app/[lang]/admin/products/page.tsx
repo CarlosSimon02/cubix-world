@@ -407,6 +407,9 @@ const ProductsPage = () => {
           sorted: <React.Fragment />,
           unsorted: <React.Fragment />,
         }}
+        classNames={{
+          pagination: "!min-h-16",
+        }}
       />
     </>
   );
