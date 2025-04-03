@@ -8,10 +8,16 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { IconLayoutGrid, IconList, IconSquarePlus } from "@tabler/icons-react";
+import useProductDrawerStore from "../_stores/useProductDrawerStore";
 import useProductViewStore from "../_stores/useProductViewStore";
 
 const ProductPageHeader = () => {
   const { view, toggleView } = useProductViewStore();
+  const { openDrawer } = useProductDrawerStore();
+
+  const handleAddProduct = () => {
+    openDrawer(null); // Open drawer with no product for creation mode
+  };
 
   return (
     <Group py="md" justify="space-between">
@@ -45,7 +51,9 @@ const ProductPageHeader = () => {
             },
           ]}
         />
-        <Button leftSection={<IconSquarePlus />}>Add Product</Button>
+        <Button leftSection={<IconSquarePlus />} onClick={handleAddProduct}>
+          Add Product
+        </Button>
       </Group>
     </Group>
   );

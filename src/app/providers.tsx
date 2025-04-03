@@ -6,6 +6,7 @@ import { CustomMantineProvider } from "@/presentation/contexts/CustomMantimeCont
 import DictionaryProvider from "@/presentation/contexts/DictionaryContext";
 import { Dictionary } from "@/types/dictionary.type";
 import { Locale } from "@/types/locale.type";
+import { ModalsProvider } from "@mantine/modals";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 type ProvidersProps = {
@@ -36,7 +37,9 @@ const Providers = ({
           dictionary={dictionary}
           currentLocale={currentLocale}
         >
-          <CustomMantineProvider>{children}</CustomMantineProvider>
+          <CustomMantineProvider>
+            <ModalsProvider>{children}</ModalsProvider>
+          </CustomMantineProvider>
         </DictionaryProvider>
       </AuthProvider>
     </QueryClientProvider>
