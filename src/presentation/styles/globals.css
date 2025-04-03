@@ -1,1 +1,5 @@
 @import "tailwind-preset-mantine";
+
+.mantine-datatable-header-cell-sortable-icon {
+  display: none;
+}
