@@ -34,13 +34,23 @@ The user asks questions about the following coding languages and technologies:
 This project follows a clean architecture approach with these key layers:
 
 - `/app` - Next.js app router components
-- `/core` - Business logic, entities, schemas, and interfaces
-- `/data` - Data access layer
+- `/core` - Business logic, entities, schemas, and interfaces (uses Date type for date/time fields)
+- `/data` - Data access layer (uses Firebase Timestamp type for date/time fields)
 - `/presentation` - UI components, hooks, and contexts
 - `/services` - External service integrations
 - `/utils` - Helper functions
 - `/types` - Type definitions
 - `/dictionaries` - Internationalization content
+
+### Date/Time Handling
+
+- In the Data Layer: Always use Firebase Timestamp type when storing/retrieving from database
+- In the Business Logic Layer (Entities): Convert to/from JavaScript Date type
+- Implement proper conversion utilities in `/utils/date` for:
+  - Converting Firebase Timestamp to Date
+  - Converting Date to Firebase Timestamp
+  - Handling null/undefined cases
+  - Timezone considerations
 
 ### Code Implementation Guidelines
 
