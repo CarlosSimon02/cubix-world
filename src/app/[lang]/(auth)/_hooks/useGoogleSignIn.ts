@@ -1,21 +1,19 @@
 "use client";
 
-import { signInWithGoogleFactory } from "@/factories/auth/signInWithGoogleFactory";
+import { signInWithGoogleUseCase } from "@/factories/authClient";
 import useRedirectParam from "@/presentation/hooks/useRedirectParam";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import postSignInAction from "../_actions/postSignInAction";
-
 export const useGoogleSignIn = () => {
-  const signInWithGoogle = signInWithGoogleFactory();
   const redirect = useRedirectParam();
   const router = useRouter();
 
   const googleSignInMutation = useMutation({
     mutationFn: async () => {
       try {
-        const authEntity = await signInWithGoogle.execute();
+        const authEntity = await signInWithGoogleUseCase.execute();
         const response = await postSignInAction(authEntity.idToken);
         if (!response.success) throw new Error(response.error);
         return authEntity;

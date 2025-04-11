@@ -1,16 +1,14 @@
 "use client";
 
-import { resetPasswordFactory } from "@/factories/auth/resetPasswordFactory";
+import { resetPasswordUseCase } from "@/factories/authClient";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 
 export const useResetPassword = () => {
-  const resetPassword = resetPasswordFactory();
-
   const resetPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
       try {
-        await resetPassword.execute(email);
+        await resetPasswordUseCase.execute(email);
       } catch (error) {
         console.error("Password reset error:", error);
         throw error;
