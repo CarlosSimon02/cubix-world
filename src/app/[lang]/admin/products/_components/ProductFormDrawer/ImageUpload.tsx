@@ -117,6 +117,7 @@ export default function ImageUpload({
                       width={100}
                       radius="sm"
                       fit="cover"
+                      alt={file.name}
                     />
                     <ActionIcon
                       color="red"
